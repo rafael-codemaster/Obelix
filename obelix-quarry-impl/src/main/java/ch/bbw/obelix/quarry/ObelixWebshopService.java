@@ -1,4 +1,4 @@
-package ch.bbw.obelix.webshop.service;
+package ch.bbw.obelix.quarry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,12 +7,11 @@ import java.util.Locale;
 import java.util.UUID;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-
-import ch.bbw.obelix.webshop.controller.ObelixWebshopController;
-import ch.bbw.obelix.webshop.dto.BasketDto;
-import ch.bbw.obelix.webshop.dto.DecorativenessDto;
-import ch.bbw.obelix.webshop.entity.MenhirEntity;
-import ch.bbw.obelix.webshop.repository.MenhirRepository;
+import ch.bbw.obelix.quarry.MenhirEntity;
+import ch.bbw.obelix.quarry.MenhirRepository;
+import ch.bbw.obelix.quarry.controller.QuarryController;
+import ch.bbw.obelix.quarry.api.DecorativenessDto;
+import ch.bbw.obelix.quarry.api.BasketDto;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
