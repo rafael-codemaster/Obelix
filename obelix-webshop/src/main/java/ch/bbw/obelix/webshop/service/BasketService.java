@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional;
 
 import ch.bbw.obelix.quarry.api.DecorativenessDto;
 import ch.bbw.obelix.quarry.api.MenhirDto;
+import ch.bbw.obelix.quarry.api.QuarryApi;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 
 import lombok.NonNull;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * Note that Obelix is definitely not multitasking-capable.
@@ -31,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequiredArgsConstructor
 public class BasketService {
 
-	private final QuarryWebclientService quarryWebclient;
+	private final QuarryApi quarryWebclient;
 
 	private BasketDto basket;
 
@@ -46,7 +48,11 @@ public class BasketService {
 	}
 
 	public MenhirDto getMenhirById(UUID menhirId) {
-		return quarryWebclient.getMenhirById(menhirId);
+		try {
+			return quarryWebclient.getMenhirById(menhirId);
+		} catch (WebClientResponseException.BadRequest e) {
+			throw new UnknownMenhirException("unknown menhir with id " + menhirId, e);
+		}
 	}
 
 	public BasketDto offer(@NonNull BasketDto.BasketItem basketItem) {
@@ -76,7 +82,7 @@ public class BasketService {
 	}
 
 	public void exchange(UUID menhirId) {
-		var menhir = quarryWebclient.getMenhirById(menhirId);
+		var menhir = getMenhirById(menhirId);
 
 		var decorativeness = menhir.decorativeness();
 
@@ -92,4 +98,8 @@ public class BasketService {
 	@StandardException
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public static class BadOfferException extends RuntimeException {}
+
+	@StandardException
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public static class UnknownMenhirException extends RuntimeException {}
 }
