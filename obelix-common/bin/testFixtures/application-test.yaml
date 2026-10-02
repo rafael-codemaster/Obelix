@@ -1,9 +1,0 @@
-spring:
-  main:
-    banner-mode: off
-  output:
-    ansi:
-      enabled: always
-logging:
-  pattern:
-    dateformat: HH:mm:ss.SSS
