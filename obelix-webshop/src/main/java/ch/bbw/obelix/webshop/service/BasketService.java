@@ -71,12 +71,12 @@ public class BasketService {
 		var stoneWorth = decorativeness.ordinal();
 
 		var basketWorth = basket.items()
-			.stream().map(x -> switch (x.name().toLowerCase(Locale.ROOT)) {
+			.stream().mapToInt(x -> switch (x.name().toLowerCase(Locale.ROOT)) {
 				case "boar" -> 5; // oh boy, oh boy!
 				case "honey" -> 2;
 				case "magic potion" -> 0; // not allowed to drink this!
 				default -> 1; // everything is worth something
-			} * x.count()).reduce(0, Integer::sum);
+			} * x.count()).sum();
 
 		log.info("basket worth {} vs menhir worth {} ({})", basketWorth, decorativeness, stoneWorth);
 
