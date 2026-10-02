@@ -13,8 +13,8 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class QuarryClientConfiguration {
 
 	@Bean
-	public QuarryApi quarryApi(QuarryProperties quarryProperties) {
-		var webClient = WebClient.builder().baseUrl(quarryProperties.baseUrl()).build();
+	public QuarryApi quarryApi(WebClient.Builder webClientBuilder, QuarryProperties quarryProperties) {
+		var webClient = webClientBuilder.baseUrl(quarryProperties.baseUrl()).build();
 		var factory = HttpServiceProxyFactory.builderFor(WebClientAdapter.create(webClient)).build();
 		return factory.createClient(QuarryApi.class);
 	}

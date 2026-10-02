@@ -14,6 +14,7 @@ import ch.bbw.obelix.quarry.api.MenhirDto;
 import ch.bbw.obelix.quarry.api.QuarryApi;
 import ch.bbw.obelix.webshop.dto.BasketDto;
 
+import io.micrometer.observation.annotation.Observed;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
@@ -55,6 +56,7 @@ public class BasketService {
 		}
 	}
 
+	@Observed(name = "obelix.basket.offer", contextualName = "offer-basket-item")
 	public BasketDto offer(@NonNull BasketDto.BasketItem basketItem) {
 		basket = basket.withItems(append(basket.items(), basketItem));
 		return basket;
@@ -81,6 +83,7 @@ public class BasketService {
 		return basketWorth >= stoneWorth;
 	}
 
+	@Observed(name = "obelix.basket.exchange", contextualName = "exchange-basket-for-menhir")
 	public void exchange(UUID menhirId) {
 		var menhir = getMenhirById(menhirId);
 
